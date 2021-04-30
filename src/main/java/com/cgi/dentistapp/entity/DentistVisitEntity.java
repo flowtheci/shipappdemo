@@ -19,11 +19,11 @@ public class DentistVisitEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @Column
-    private String dentist;
+    public String dentist;
     @Column
-    private LocalDate date;
+    public LocalDate date;
     @Column
-    private LocalTime time;
+    public LocalTime time;
 
     public DentistVisitEntity() {
 

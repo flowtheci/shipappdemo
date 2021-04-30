@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <title th:text="#{table.title}"></title>
+    <a th:href="@{/}">
+        <button type="button" th:text="#{button.back}"></button>
+    </a>
+    <table>
+        <thead>
+            <tr>
+                <td width="20px"><b th:text="#{table.id}"></b></td>
+                <td><b th:text="#{table.name}"></b></td>
+                <td><b th:text="#{table.date}"></b></td>
+                <td><b th:text="#{table.time}"></b></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="visit: ${visits}">
+                <td th:text="${visit.id}"></td>
+                <td th:text="${visit.dentist}"></td>
+                <td th:text="${visit.date}"></td>
+                <td th:text="${visit.time}"></td>
+            </tr>
+
+        </tbody>
+    </table>
+
+
+</body>
+</html>

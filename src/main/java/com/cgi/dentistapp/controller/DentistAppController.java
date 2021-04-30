@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @EnableAutoConfiguration
@@ -62,6 +64,12 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
 
         dentistVisitService.addVisit(dentistVisitDTO.getDentistName(), dentistVisitDTO.getVisitTime(), dentistVisitDTO.getVisitClock());
         return "redirect:/results";
+    }
+
+    @GetMapping("/table")
+    public String listVisits(Model model){
+        model.addAttribute("visits", dentistVisitService.getAllVisits());
+        return "table";
     }
 
 
