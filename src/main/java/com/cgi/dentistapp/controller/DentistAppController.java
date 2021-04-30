@@ -2,6 +2,7 @@ package com.cgi.dentistapp.controller;
 
 import com.cgi.dentistapp.dto.DentistVisitDTO;
 import com.cgi.dentistapp.entity.DentistVisitEntity;
+import com.cgi.dentistapp.entity.RemoveVisit;
 import com.cgi.dentistapp.service.DentistVisitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -69,7 +70,16 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     @GetMapping("/table")
     public String listVisits(Model model){
         model.addAttribute("visits", dentistVisitService.getAllVisits());
+        model.addAttribute("removeVisit", new RemoveVisit());
         return "table";
+    }
+
+
+
+    @PostMapping("/table")
+    public String removeVisit(RemoveVisit removeVisit){
+        dentistVisitService.delete(removeVisit.getId());
+        return "redirect:/table";
     }
 
 

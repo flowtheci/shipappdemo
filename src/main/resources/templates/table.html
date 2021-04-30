@@ -16,10 +16,13 @@
         </thead>
         <tbody>
             <tr th:each="visit: ${visits}">
-                <td th:text="${visit.id}"></td>
-                <td th:text="${visit.dentist}"></td>
-                <td th:text="${visit.date}"></td>
-                <td th:text="${visit.time}"></td>
+                <form action="#" th:action="@{/table}" th:object="${removeVisit}" method="post">
+                    <td th:text="${visit.id}"></td>
+                    <td th:text="${visit.dentist}"></td>
+                    <td th:text="${visit.date}"></td>
+                    <td th:text="${visit.time}"></td>
+                    <td><input type="hidden" th:value="${visit.id}" name="id" id="id"/><button type="submit" th:text="#{button.remove}" name="remove"></button></td>
+                </form>
             </tr>
 
         </tbody>
