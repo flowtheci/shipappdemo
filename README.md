@@ -5,3 +5,5 @@ Siit leiab terve minu proovitöö projekti. Alustasin küll sellega tegelemist 2
 Esimene commit on täpselt pärast esimese etapi saavutamist. Kuna ma pole kunagi kasutanud Spring Booti ega Mavenit (ja Javat ainult natukene) siis pidin enamjaolt kõik info internetist otsima. Esimese etapi saavutamiseks kasutasin vaid lehekülge https://stackabuse.com/integrating-h2-database-with-spring-boot/, mis aitas mul aru saada mida mingi koodi osa teeb ja kuidas see töötab.
 
 Pärast esimest commiti on igas commitis kirjeldatud täpselt mis tegin, mis allikaid kasutasin, ja sealt on ka näha millal selle tegin, võrreldes eelmise commitiga.
+
+!PS: mõlemad contributorid sellele projektile on mu enda kasutajad, millegipärast logis intellij valest kasutajast sisse nii et nüüd kuvab nagu oleks 2 contributori.
