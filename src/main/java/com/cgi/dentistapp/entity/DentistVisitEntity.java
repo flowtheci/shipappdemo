@@ -1,15 +1,11 @@
 package com.cgi.dentistapp.entity;
 
-import org.apache.tomcat.jni.Local;
-import org.springframework.data.repository.CrudRepository;
-
 import javax.persistence.*;
 import javax.transaction.Transactional;
-import java.sql.Time;
-import java.sql.Date;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
 
 @Entity
 @Transactional
@@ -25,6 +21,8 @@ public class DentistVisitEntity {
     @Column
     public LocalTime time;
 
+
+
     public DentistVisitEntity() {
 
     }
@@ -39,6 +37,13 @@ public class DentistVisitEntity {
     public int getId() {
         return id;
     }
+
+    public void setDentist(String dentist) {this.dentist = dentist;}
+
+    public void setDate(LocalDate date) {this.date = date;}
+
+    public void setTime(LocalTime time) {this.time = time;}
+
 
 
 }

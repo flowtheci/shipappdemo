@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -22,6 +23,11 @@ public class DentistVisitService {
 
     @Autowired
     DentistVisitRepository dentistVisitRepository;
+
+    public int modifyId;
+
+    // TODO pull from DB instead of hardcoding
+    public List<String> dentistList = Arrays.asList("Mari Maasikas", "Juhan Juhm", "Joosep Keilast", "Urmas Hammas");
 
     public List<DentistVisitEntity> getAllVisits() {
         List<DentistVisitEntity> dentistVisits = new ArrayList<DentistVisitEntity>();
@@ -41,8 +47,23 @@ public class DentistVisitService {
         dentistVisitRepository.delete(id);
     }
 
+    public void modify(int id) {this.modifyId = id;}
+
+    public DentistVisitEntity getSelectedVisit(){return dentistVisitRepository.findOne(modifyId);}
+
     public void addVisit(String dentistName, LocalDate visitTime, LocalTime visitClock) {
         DentistVisitEntity visit = new DentistVisitEntity(dentistName, visitTime, visitClock);
         visit = dentistVisitRepository.save(visit);
     }
+
+    public void changeVisit(String dentistName, LocalDate visitTime, LocalTime visitClock) {
+        DentistVisitEntity visit = dentistVisitRepository.findOne(modifyId);
+        visit.setDentist(dentistName);
+        visit.setDate(visitTime);
+        visit.setTime(visitClock);
+        dentistVisitRepository.save(visit);
+
+    }
+
+    public List<String> getDentistList() {return dentistList;}
 }

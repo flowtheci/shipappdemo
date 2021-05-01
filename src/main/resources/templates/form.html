@@ -5,9 +5,7 @@
         <tr>
             <td><p th:text="#{dentist.name}">dentist.name</p></td>
             <td><select type="text" th:field="*{dentistName}">
-                <option value="Mari Maasikas">Mari Maasikas</option>
-                <option value="Juhan Juhm">Juhan Juhm</option>
-                <option value="Joosep Keilast">Joosep Keilast</option>
+                <option th:each="dentist: ${dentists}" th:value="${dentist}" th:text="${dentist}"></option>
             </select></td>
             <td th:if="${#fields.hasErrors('dentistName')}" th:errors="*{dentistName}">name.error</td>
         </tr>
@@ -17,6 +15,8 @@
           <td th:if="${#fields.hasErrors('visitTime')}" th:errors="*{visitTime}">date.error</td>
             <td><input type="time" list="times" step="900" th:field="*{visitClock}"/></td>
             <datalist id="times">
+                <!-- Chrome doesn't show LocalTime with step correctly, so for this a datalist was the best alternative
+                I could come up with. Awful! -->
                 <option>09:00</option>
                 <option>09:15</option>
                 <option>09:30</option>
@@ -54,7 +54,7 @@
         </tr>
         <tr>
             <td>
-                <button type="submit" th:text="#{register.visit}"></button>
+                <button type="submit" name="submit" th:text="#{register.visit}"></button>
             </td>
         </tr>
     </table>

@@ -1,29 +1,27 @@
 package com.cgi.dentistapp.dto;
 
+import com.cgi.dentistapp.validator.DentistConstraint;
+import com.cgi.dentistapp.validator.LocalDateConstraint;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
+
 
 public class DentistVisitDTO {
 
-    @Size(min = 1, max = 50)
+    @DentistConstraint
     String dentistName;
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @LocalDateConstraint
     LocalDate visitTime;
 
     @NotNull
     @DateTimeFormat(pattern = "HH:mm")
     LocalTime visitClock;
-    String fullTime;
 
 
     public DentistVisitDTO() {
@@ -56,7 +54,6 @@ public class DentistVisitDTO {
 
     public void setVisitClock(LocalTime visitClock) {this.visitClock = visitClock;}
 
-    public String getFullTime() {return fullTime;}
 
 
 }

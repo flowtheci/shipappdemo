@@ -1,19 +1,27 @@
 <html>
 <body>
-<form action="#" th:action="@{/}" th:object="${dentistVisitDTO}" method="post">
+<tr>
+    <td>
+        <a th:href="@{/}">
+            <button type="button" th:text="#{button.back}"></button>
+        </a>
+    </td>
+</tr>
+<h1 th:text="#{change.visit}"></h1>
+<form action="#" th:action="@{/modify}" th:object="${dentistVisitDTO}" method="post">
     <table>
         <tr>
             <td><p th:text="#{dentist.name}">dentist.name</p></td>
-            <td><select type="text" th:field="*{dentistName}">
-                <option th:each="dentist: ${dentists}" th:value="${dentist}" th:text="${dentist}"></option>
+            <td><select type="text" name="dentistName" id="dentistName">
+                <option th:each="dentist: ${dentists}" th:value="${dentist}" th:text="${dentist}" th:selected="${dentist==selectedVisit.dentist}"></option>
             </select></td>
             <td th:if="${#fields.hasErrors('dentistName')}" th:errors="*{dentistName}">name.error</td>
         </tr>
         <tr>
             <td><p th:text="#{visit.date}">visit.date</p></td>
-            <td><input type="date" th:field="*{visitTime}"/></td>
+            <td><input type="date" th:name="visitTime" th:id="visitTime" th:value="${selectedVisit.date}"/></td>
           <td th:if="${#fields.hasErrors('visitTime')}" th:errors="*{visitTime}">date.error</td>
-            <td><input type="time" list="times" step="900" th:field="*{visitClock}"/></td>
+            <td><input type="time" list="times" step="900" th:name="visitClock" th:id="visitClock" th:value="${selectedVisit.time}"/></td>
             <datalist id="times">
                 <!-- Chrome doesn't show LocalTime with step correctly, so for this a datalist was the best alternative
                 I could come up with. Awful! -->
@@ -54,17 +62,10 @@
         </tr>
         <tr>
             <td>
-                <button type="submit" name="submit" th:text="#{register.visit}"></button>
+                <button type="submit" name="change" th:text="#{confirm.change}"></button>
             </td>
         </tr>
     </table>
 </form>
-<tr>
-    <td>
-        <a th:href="@{table}">
-            <button type="button" th:text="#{button.table}"></button>
-        </a>
-    </td>
-</tr>
 </body>
 </html>

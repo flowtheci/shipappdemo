@@ -15,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,9 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     }
 
     @GetMapping("/")
-    public String showRegisterForm(DentistVisitDTO dentistVisitDTO) {
+    public String showRegisterForm(Model model) {
+        model.addAttribute("dentistVisitDTO", new DentistVisitDTO());
+        model.addAttribute("dentists", dentistVisitService.getDentistList());
         return "form";
     }
 
@@ -57,7 +60,7 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
         return visit.getId();
     }
 
-    @PostMapping("/")
+    @PostMapping(path="/", name="submit")
     public String postRegisterForm(@Valid DentistVisitDTO dentistVisitDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "form";
@@ -74,13 +77,34 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
         return "table";
     }
 
-
-
-    @PostMapping("/table")
+    @PostMapping(path="/table", params="remove")
     public String removeVisit(RemoveVisit removeVisit){
         dentistVisitService.delete(removeVisit.getId());
         return "redirect:/table";
     }
 
+    @PostMapping(path="/table", params="modify")
+    public String changeVisit(RemoveVisit removeVisit){
+        dentistVisitService.modify(removeVisit.getId());
+        return "redirect:/modify";
+    }
+
+    @GetMapping("/modify")
+    public String showModifyForm(Model model) {
+        model.addAttribute("selectedVisit", dentistVisitService.getSelectedVisit());
+        model.addAttribute("dentistVisitDTO", new DentistVisitDTO());
+        model.addAttribute("dentists", dentistVisitService.getDentistList());
+        return "modify";
+    }
+
+    @PostMapping(path="/modify", params="change")
+    public String postModifyForm(@Valid DentistVisitDTO dentistVisitDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "modify";
+        }
+
+        dentistVisitService.changeVisit(dentistVisitDTO.getDentistName(), dentistVisitDTO.getVisitTime(), dentistVisitDTO.getVisitClock());
+        return "redirect:/table";
+    }
 
 }
