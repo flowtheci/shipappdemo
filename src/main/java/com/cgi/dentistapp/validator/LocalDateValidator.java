@@ -15,9 +15,13 @@ public class LocalDateValidator implements ConstraintValidator<LocalDateConstrai
 
     @Override
     public boolean isValid(LocalDate date, ConstraintValidatorContext cxt) {
-        if(date.compareTo(LocalDate.now()) <= 0){
-            return false;
+        if (date != null) // @NotNull by itself doesn't work and generates a NPE if it isn't caught here
+        {
+            if(date.compareTo(LocalDate.now()) <= 0){
+                return false;
+            }
+            else return true;
         }
-        else return true;
+        else return false;
     }
 }

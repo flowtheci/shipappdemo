@@ -12,6 +12,7 @@
                 <td><b th:text="#{table.name}"></b></td>
                 <td><b th:text="#{table.date}"></b></td>
                 <td><b th:text="#{table.time}"></b></td>
+                <td><b th:text="#{table.customer}"></b></td>
             </tr>
         </thead>
         <tbody>
@@ -21,6 +22,7 @@
                     <td th:text="${visit.dentist}"></td>
                     <td th:text="${visit.date}"></td>
                     <td th:text="${visit.time}"></td>
+                    <td th:text="${visit.customer}"></td>
                     <td><input type="hidden" th:value="${visit.id}" name="id" id="id"/></td>
                     <td><button type="submit" th:text="#{button.remove}" name="remove"></button></td>
                     <td><button type="submit" th:text="#{button.modify}" name="modify"></button></td>

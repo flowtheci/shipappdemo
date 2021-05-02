@@ -16,8 +16,6 @@ public class DentistValidator implements ConstraintValidator<DentistConstraint, 
     @Autowired
     private DentistVisitService dentistVisitService;
 
-    // this is definitely not a smart way to do this, currently dentist names are hardcoded in, should be swapped out
-    // for either a table of dentist names or some other system in the future.
     @Override
     public boolean isValid(String s, ConstraintValidatorContext cxt) {
         return dentistVisitService.getDentistList().contains(s);

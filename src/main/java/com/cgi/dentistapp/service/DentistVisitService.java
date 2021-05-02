@@ -4,15 +4,10 @@ import com.cgi.dentistapp.entity.DentistVisitEntity;
 import com.cgi.dentistapp.entity.DentistVisitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.data.repository.CrudRepository;
 
 import javax.transaction.Transactional;
-import java.sql.Date;
-import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +20,7 @@ public class DentistVisitService {
     DentistVisitRepository dentistVisitRepository;
 
     public int modifyId;
+    public boolean wasAvailable = true;
 
     // TODO pull from DB instead of hardcoding
     public List<String> dentistList = Arrays.asList("Mari Maasikas", "Juhan Juhm", "Joosep Keilast", "Urmas Hammas");
@@ -49,21 +45,43 @@ public class DentistVisitService {
 
     public void modify(int id) {this.modifyId = id;}
 
-    public DentistVisitEntity getSelectedVisit(){return dentistVisitRepository.findOne(modifyId);}
-
-    public void addVisit(String dentistName, LocalDate visitTime, LocalTime visitClock) {
-        DentistVisitEntity visit = new DentistVisitEntity(dentistName, visitTime, visitClock);
-        visit = dentistVisitRepository.save(visit);
+    public boolean getAvailabilityOfLast(){
+        return wasAvailable;
     }
 
-    public void changeVisit(String dentistName, LocalDate visitTime, LocalTime visitClock) {
+    public DentistVisitEntity getSelectedVisit(){return dentistVisitRepository.findOne(modifyId);}
+
+    public boolean addVisit(String dentistName, LocalDate visitTime, LocalTime visitClock, String customerName) {
+        // check if visit is already taken
+        List<DentistVisitEntity> dentistVisits = getAllVisits();
+        DentistVisitEntity c = dentistVisits.stream()
+                .filter(s -> s.getDentist().equals(dentistName) && s.getDate().equals(visitTime) && s.getTime().equals(visitClock))
+                .findFirst().orElse(null);
+
+        if (c == null)
+        {
+            DentistVisitEntity visit = new DentistVisitEntity(dentistName, visitTime, visitClock, customerName);
+            visit = dentistVisitRepository.save(visit);
+            wasAvailable = true;
+            return true;
+        }
+        else
+        {
+            wasAvailable = false;
+            return false;
+        }
+    }
+
+    public void changeVisit(String dentistName, LocalDate visitTime, LocalTime visitClock, String customerName) {
         DentistVisitEntity visit = dentistVisitRepository.findOne(modifyId);
         visit.setDentist(dentistName);
         visit.setDate(visitTime);
         visit.setTime(visitClock);
+        visit.setCustomer(customerName);
         dentistVisitRepository.save(visit);
 
     }
 
     public List<String> getDentistList() {return dentistList;}
+
 }

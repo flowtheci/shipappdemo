@@ -6,25 +6,26 @@ import com.cgi.dentistapp.entity.RemoveVisit;
 import com.cgi.dentistapp.service.DentistVisitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-
 import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+
 
 @Controller
 @EnableAutoConfiguration
+@SessionAttributes({"dentists","dentistVisitDTO","selectedVisit"})
+
 public class DentistAppController extends WebMvcConfigurerAdapter {
 
     @Autowired
     private DentistVisitService dentistVisitService;
+
+    public boolean available = false;
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -35,6 +36,7 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     public String showRegisterForm(Model model) {
         model.addAttribute("dentistVisitDTO", new DentistVisitDTO());
         model.addAttribute("dentists", dentistVisitService.getDentistList());
+        model.addAttribute("availability", dentistVisitService.getAvailabilityOfLast());
         return "form";
     }
 
@@ -61,13 +63,16 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     }
 
     @PostMapping(path="/", name="submit")
-    public String postRegisterForm(@Valid DentistVisitDTO dentistVisitDTO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "form";
-        }
+    public String postRegisterForm(@Valid DentistVisitDTO dentistVisitDTO, BindingResult bindingResult)
+    {
+        if (bindingResult.hasErrors()) {return "form";}
 
-        dentistVisitService.addVisit(dentistVisitDTO.getDentistName(), dentistVisitDTO.getVisitTime(), dentistVisitDTO.getVisitClock());
-        return "redirect:/results";
+       if(dentistVisitService.addVisit(dentistVisitDTO.getDentistName(), dentistVisitDTO.getVisitTime(),
+               dentistVisitDTO.getVisitClock(), dentistVisitDTO.getCustomerName()))
+       {
+           return "redirect:/results";
+       }
+       else return "form";
     }
 
     @GetMapping("/table")
@@ -98,12 +103,13 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     }
 
     @PostMapping(path="/modify", params="change")
-    public String postModifyForm(@Valid DentistVisitDTO dentistVisitDTO, BindingResult bindingResult) {
+    public String postModifyForm(@Valid @ModelAttribute("dentistVisitDTO") DentistVisitDTO dentistVisitDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "modify";
         }
 
-        dentistVisitService.changeVisit(dentistVisitDTO.getDentistName(), dentistVisitDTO.getVisitTime(), dentistVisitDTO.getVisitClock());
+        dentistVisitService.changeVisit(dentistVisitDTO.getDentistName(), dentistVisitDTO.getVisitTime(),
+                                        dentistVisitDTO.getVisitClock(), dentistVisitDTO.getCustomerName());
         return "redirect:/table";
     }
 

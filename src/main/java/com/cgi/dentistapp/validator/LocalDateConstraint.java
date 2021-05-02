@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 
 public @interface LocalDateConstraint {
-    String message() default "Valitud kuupäev peab olema tulevikus!";
+    String message() default "date error";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
