@@ -15,7 +15,7 @@
                 <td><b th:text="#{table.time}"></b></td>
                 <td><b th:text="#{table.customer}"></b></td>
                 <form action="#" th:action="@{/table}" th:object="${searchForVisit}" method="post">
-                    <td><input type="text" th:value="${lastsearch}"  th:placeholder="#{placeholder.search}" id="searchTerm" name="searchTerm"/></td>
+                    <td><input type="text"   th:placeholder="#{placeholder.search}" id="searchTerm" name="searchTerm"/></td>
                     <td><button type="submit" th:text="#{button.search}" name="search"/></td>
                 </form>
             </tr>
