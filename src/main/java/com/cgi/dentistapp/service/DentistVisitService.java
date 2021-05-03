@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -21,6 +22,8 @@ public class DentistVisitService {
 
     public int modifyId;
     public boolean wasAvailable = true;
+    public boolean isSearching = false;
+    public String searchTerm;
 
     // TODO pull from DB instead of hardcoding
     public List<String> dentistList = Arrays.asList("Mari Maasikas", "Juhan Juhm", "Joosep Keilast", "Urmas Hammas");
@@ -28,15 +31,15 @@ public class DentistVisitService {
     public List<DentistVisitEntity> getAllVisits() {
         List<DentistVisitEntity> dentistVisits = new ArrayList<DentistVisitEntity>();
         dentistVisitRepository.findAll().forEach(visit -> dentistVisits.add(visit));
-        return dentistVisits;
+        if(!isSearching) {
+            return dentistVisits;
+        }
+        List<DentistVisitEntity> searchedVisits = dentistVisits.stream().filter(s -> s.getCustomer().toLowerCase().contains(searchTerm.toLowerCase())).collect(Collectors.toList());
+        return searchedVisits;
     }
 
     public DentistVisitEntity getVisitById(int id) {
         return dentistVisitRepository.findOne(id);
-    }
-
-    public void saveOrUpdate (DentistVisitEntity visit) {
-        dentistVisitRepository.save(visit);
     }
 
     public void delete(int id) {
@@ -50,6 +53,15 @@ public class DentistVisitService {
     }
 
     public DentistVisitEntity getSelectedVisit(){return dentistVisitRepository.findOne(modifyId);}
+
+    public void searchForVisit(String searchTerm) {
+        isSearching = true;
+        this.searchTerm = searchTerm;
+    }
+
+    public void resetSearch() {isSearching = false;}
+
+    public boolean getIsSearching() {return isSearching;}
 
     public boolean addVisit(String dentistName, LocalDate visitTime, LocalTime visitClock, String customerName) {
         // check if visit is already taken

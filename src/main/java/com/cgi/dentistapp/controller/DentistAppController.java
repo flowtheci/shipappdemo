@@ -1,8 +1,8 @@
 package com.cgi.dentistapp.controller;
 
 import com.cgi.dentistapp.dto.DentistVisitDTO;
-import com.cgi.dentistapp.entity.DentistVisitEntity;
-import com.cgi.dentistapp.entity.RemoveVisit;
+import com.cgi.dentistapp.dto.RemoveVisit;
+import com.cgi.dentistapp.dto.SearchForVisit;
 import com.cgi.dentistapp.service.DentistVisitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import javax.validation.Valid;
-import java.util.List;
 
 
 @Controller
@@ -25,41 +24,18 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     @Autowired
     private DentistVisitService dentistVisitService;
 
-    public boolean available = false;
-
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/results").setViewName("results");
     }
 
+    // Maps GET requests for main domain and adds attributes to model
     @GetMapping("/")
     public String showRegisterForm(Model model) {
         model.addAttribute("dentistVisitDTO", new DentistVisitDTO());
         model.addAttribute("dentists", dentistVisitService.getDentistList());
         model.addAttribute("availability", dentistVisitService.getAvailabilityOfLast());
         return "form";
-    }
-
-    @GetMapping("/dentistVisits")
-    private List<DentistVisitEntity> getAllVisits() {
-        return dentistVisitService.getAllVisits();
-    }
-
-    @GetMapping("/dentistVisits/{id}")
-    private DentistVisitEntity getVisit(@PathVariable("id") int id) {
-        return dentistVisitService.getVisitById(id);
-    }
-
-    @DeleteMapping("/dentistVisits/{id}")
-    private void deleteVisit(@PathVariable("id") int id) {
-        dentistVisitService.delete(id);
-    }
-
-    @PostMapping("/dentistVisits")
-    @ResponseBody
-    private int saveVisit(@RequestBody DentistVisitEntity visit) {
-        dentistVisitService.saveOrUpdate(visit);
-        return visit.getId();
     }
 
     @PostMapping(path="/", name="submit")
@@ -79,6 +55,9 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     public String listVisits(Model model){
         model.addAttribute("visits", dentistVisitService.getAllVisits());
         model.addAttribute("removeVisit", new RemoveVisit());
+        model.addAttribute("searchForVisit", new SearchForVisit());
+        model.addAttribute("searching", dentistVisitService.getIsSearching());
+        dentistVisitService.resetSearch();
         return "table";
     }
 
@@ -94,6 +73,12 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
         return "redirect:/modify";
     }
 
+    @PostMapping(path="/table", params="search")
+    public String searchForVisit(SearchForVisit searchForVisit){
+        dentistVisitService.searchForVisit(searchForVisit.getSearchTerm());
+        return "redirect:/table";
+    }
+
     @GetMapping("/modify")
     public String showModifyForm(Model model) {
         model.addAttribute("selectedVisit", dentistVisitService.getSelectedVisit());
@@ -103,7 +88,7 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     }
 
     @PostMapping(path="/modify", params="change")
-    public String postModifyForm(@Valid @ModelAttribute("dentistVisitDTO") DentistVisitDTO dentistVisitDTO, BindingResult bindingResult) {
+    public String postModifyForm(@Valid DentistVisitDTO dentistVisitDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "modify";
         }

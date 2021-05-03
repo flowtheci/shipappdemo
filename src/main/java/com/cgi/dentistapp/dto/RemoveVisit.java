@@ -1,4 +1,4 @@
-package com.cgi.dentistapp.entity;
+package com.cgi.dentistapp.dto;
 
 // empty object for deleting an entry from the db
 // probably unnecessary but it works!

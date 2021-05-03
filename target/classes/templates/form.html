@@ -6,13 +6,13 @@
             <td><p th:text="#{customer.name}"></p></td>
             <td><input type="text" th:field="*{customerName}"/></td>
             <td th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}">name.error</td>
-            <td th:text="${availability} ? '' : #{selection.error}"/>
         </tr>
         <tr>
             <td><p th:text="#{dentist.name}">dentist.name</p></td>
             <td><select type="text" name="dentistName" id="dentistName">
                 <option th:each="dentist: ${dentists}" th:value="${dentist}" th:text="${dentist}"></option>
             </select></td>
+            <td th:text="${availability} ? '' : #{selection.error}"/>
         </tr>
         <tr>
             <td><p th:text="#{visit.date}">visit.date</p></td>
