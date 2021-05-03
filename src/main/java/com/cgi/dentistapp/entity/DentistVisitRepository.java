@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 public interface DentistVisitRepository extends CrudRepository<DentistVisitEntity, Integer> {
 }
 
-// CRUD operations were made possible with the help of https://stackabuse.com/integrating-h2-database-with-spring-boot/
+// Based off of https://stackabuse.com/integrating-h2-database-with-spring-boot/
+//

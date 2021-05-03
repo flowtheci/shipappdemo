@@ -1,5 +1,7 @@
 package com.cgi.dentistapp.dto;
 
+// links search term to controller
+
 public class SearchForVisit {
 
     public String searchTerm;

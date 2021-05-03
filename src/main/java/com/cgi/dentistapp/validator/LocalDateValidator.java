@@ -10,12 +10,13 @@ public class LocalDateValidator implements ConstraintValidator<LocalDateConstrai
     public void initialize(LocalDateConstraint selectedDate){
     }
 
-    // This custom validation is needed as @Future tag does not support LocalDate, as LocalDate is
+    // Checks selected date, returns valid if it's at least 1 day in the future
+    // This custom validation is needed because @Future tag does not support LocalDate, as LocalDate is
     // a timestamp without any timezones.
 
     @Override
     public boolean isValid(LocalDate date, ConstraintValidatorContext cxt) {
-        if (date != null) // @NotNull by itself doesn't work and generates a NPE if it isn't caught here
+        if (date != null) // Technically unneeded as @NotNull could be set to run first but this is easier and safer
         {
             if(date.compareTo(LocalDate.now()) <= 0){
                 return false;

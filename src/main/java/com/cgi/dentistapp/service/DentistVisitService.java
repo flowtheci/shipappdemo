@@ -28,6 +28,7 @@ public class DentistVisitService {
     // TODO pull from DB instead of hardcoding
     public List<String> dentistList = Arrays.asList("Mari Maasikas", "Juhan Juhm", "Joosep Keilast", "Urmas Hammas");
 
+    // Gets all visits from db, if searching then filters out everything not containing search term
     public List<DentistVisitEntity> getAllVisits() {
         List<DentistVisitEntity> dentistVisits = new ArrayList<DentistVisitEntity>();
         dentistVisitRepository.findAll().forEach(visit -> dentistVisits.add(visit));
@@ -64,13 +65,13 @@ public class DentistVisitService {
     public boolean getIsSearching() {return isSearching;}
 
     public boolean addVisit(String dentistName, LocalDate visitTime, LocalTime visitClock, String customerName) {
-        // check if visit is already taken
         List<DentistVisitEntity> dentistVisits = getAllVisits();
+        // Checks if a matching entry with the same dentist name, date and time exists
         DentistVisitEntity c = dentistVisits.stream()
                 .filter(s -> s.getDentist().equals(dentistName) && s.getDate().equals(visitTime) && s.getTime().equals(visitClock))
                 .findFirst().orElse(null);
 
-        if (c == null)
+        if (c == null) // If no match found, creates new DentistVisitEntity and saves to db
         {
             DentistVisitEntity visit = new DentistVisitEntity(dentistName, visitTime, visitClock, customerName);
             visit = dentistVisitRepository.save(visit);
@@ -84,6 +85,7 @@ public class DentistVisitService {
         }
     }
 
+    // Modifies existing DentistVisitEntity
     public void changeVisit(String dentistName, LocalDate visitTime, LocalTime visitClock, String customerName) {
         DentistVisitEntity visit = dentistVisitRepository.findOne(modifyId);
         visit.setDentist(dentistName);

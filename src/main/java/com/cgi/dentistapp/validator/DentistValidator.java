@@ -18,6 +18,7 @@ public class DentistValidator implements ConstraintValidator<DentistConstraint, 
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext cxt) {
+        // returns valid only if dentist list contains selected dentist
         return dentistVisitService.getDentistList().contains(s);
     }
 }

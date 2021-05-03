@@ -29,7 +29,7 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
         registry.addViewController("/results").setViewName("results");
     }
 
-    // Maps GET requests for main domain and adds attributes to model
+    // Maps GET requests for main site and adds attributes to model
     @GetMapping("/")
     public String showRegisterForm(Model model) {
         model.addAttribute("dentistVisitDTO", new DentistVisitDTO());
@@ -38,6 +38,8 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
         return "form";
     }
 
+    // Maps POST request on form submit, validates for errors from DentistVisitDTO and adds visit via DentistVisitService
+    // when no errors are found.
     @PostMapping(path="/", name="submit")
     public String postRegisterForm(@Valid DentistVisitDTO dentistVisitDTO, BindingResult bindingResult)
     {
@@ -51,6 +53,7 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
        else return "form";
     }
 
+    // Maps GET request and gets visits for table to function
     @GetMapping("/table")
     public String listVisits(Model model){
         model.addAttribute("visits", dentistVisitService.getAllVisits());
@@ -61,24 +64,28 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
         return "table";
     }
 
+    // Removes selected entry from database
     @PostMapping(path="/table", params="remove")
     public String removeVisit(RemoveVisit removeVisit){
         dentistVisitService.delete(removeVisit.getId());
         return "redirect:/table";
     }
 
+    // Redirects to modify page and sets modifiable entry ID in DentistVisitService.
     @PostMapping(path="/table", params="modify")
     public String changeVisit(RemoveVisit removeVisit){
         dentistVisitService.modify(removeVisit.getId());
         return "redirect:/modify";
     }
 
+    // Saves search term in DentistVisitService and redirects to same page to reload visit list
     @PostMapping(path="/table", params="search")
     public String searchForVisit(SearchForVisit searchForVisit){
         dentistVisitService.searchForVisit(searchForVisit.getSearchTerm());
         return "redirect:/table";
     }
 
+    // Same logic as main page get mapping, adds selectedvisit to attributes to load visit to html
     @GetMapping("/modify")
     public String showModifyForm(Model model) {
         model.addAttribute("selectedVisit", dentistVisitService.getSelectedVisit());
@@ -87,6 +94,7 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
         return "modify";
     }
 
+    // Validates form and modifies visit via DentistVisitService
     @PostMapping(path="/modify", params="change")
     public String postModifyForm(@Valid DentistVisitDTO dentistVisitDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
