@@ -1,0 +1,25 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "demo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flowtheci/dentistvisitrepo.git"
+  },
+  "keywords": [
+    "yes"
+  ],
+  "author": "me",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/flowtheci/dentistvisitrepo/issues"
+  },
+  "homepage": "https://github.com/flowtheci/dentistvisitrepo#readme",
+  "dependencies": {
+    "create-react-app": "^4.0.3"
+  }
+}
